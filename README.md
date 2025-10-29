@@ -66,7 +66,7 @@ src/
 └── index.css
 
 yaml
-Copy code
+
 
 ---
 
@@ -78,21 +78,18 @@ Copy code
 git clone https://github.com/yourusername/workout-timer.git
 cd workout-timer
 2. Install Dependencies
-bash
-Copy code
+
 npm install
 3. Run the Development Server
-bash
-Copy code
+
 npm run dev
 Then open:
 
-arduino
-Copy code
+
 http://localhost:5173/
 🧩 Example Output
 csharp
-Copy code
+
 Workout timer
 For your workout on Oct 29, 25, 10:45:30 AM
 [Toggle Sounds Button]
