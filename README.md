@@ -79,6 +79,7 @@ git clone https://github.com/yourusername/workout-timer.git
 cd workout-timer
 2. Install Dependencies
 
+
 npm install
 3. Run the Development Server
 
@@ -86,9 +87,11 @@ npm run dev
 Then open:
 
 
+
 http://localhost:5173/
 🧩 Example Output
 csharp
+
 
 Workout timer
 For your workout on Oct 29, 25, 10:45:30 AM
