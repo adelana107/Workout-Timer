@@ -1,4 +1,4 @@
-import { useState, memo, useEffect } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import clickSound from "./ClickSound.m4a";
 
 function Calculator({ workouts, allowSound }) {
@@ -6,32 +6,30 @@ function Calculator({ workouts, allowSound }) {
   const [sets, setSets] = useState(3);
   const [speed, setSpeed] = useState(90);
   const [durationBreak, setDurationBreak] = useState(5);
-
   const [duration, setDuration] = useState(0);
 
-  useEffect(
-    function () {
-      setDuration((number * sets * speed) / 60 + (sets - 1) * durationBreak);
-    },
-    [number, sets, speed, durationBreak]
-  );
-
-  // const duration = (number * sets * speed) / 60 + (sets - 1) * durationBreak;
-  const mins = Math.floor(duration);
-  const seconds = (duration - mins) * 60;
-
-  const playSound = function () {
+  const playSound = useCallback(() => {
     if (!allowSound) return;
     const sound = new Audio(clickSound);
     sound.play();
-  };
+  }, [allowSound]);
+
+  useEffect(() => {
+    setDuration((number * sets * speed) / 60 + (sets - 1) * durationBreak);
+    playSound();
+  }, [number, sets, speed, durationBreak, playSound]);
+
+  const mins = Math.floor(duration);
+  const seconds = Math.round((duration - mins) * 60);
 
   function handleInc() {
     setDuration((duration) => Math.floor(duration) + 1);
+    playSound();
   }
 
   function handleDec() {
     setDuration((duration) => (duration > 1 ? Math.ceil(duration) - 1 : 0));
+    playSound();
   }
 
   return (
@@ -47,6 +45,7 @@ function Calculator({ workouts, allowSound }) {
             ))}
           </select>
         </div>
+
         <div>
           <label>How many sets?</label>
           <input
@@ -54,10 +53,11 @@ function Calculator({ workouts, allowSound }) {
             min="1"
             max="5"
             value={sets}
-            onChange={(e) => setSets(e.target.value)}
+            onChange={(e) => setSets(+e.target.value)}
           />
           <span>{sets}</span>
         </div>
+
         <div>
           <label>How fast are you?</label>
           <input
@@ -66,10 +66,11 @@ function Calculator({ workouts, allowSound }) {
             max="180"
             step="30"
             value={speed}
-            onChange={(e) => setSpeed(e.target.value)}
+            onChange={(e) => setSpeed(+e.target.value)}
           />
           <span>{speed} sec/exercise</span>
         </div>
+
         <div>
           <label>Break length</label>
           <input
@@ -77,17 +78,17 @@ function Calculator({ workouts, allowSound }) {
             min="1"
             max="10"
             value={durationBreak}
-            onChange={(e) => setDurationBreak(e.target.value)}
+            onChange={(e) => setDurationBreak(+e.target.value)}
           />
           <span>{durationBreak} minutes/break</span>
         </div>
       </form>
+
       <section>
         <button onClick={handleDec}>–</button>
         <p>
-          {mins < 10 && "0"}
-          {mins}:{seconds < 10 && "0"}
-          {seconds}
+          {mins.toString().padStart(2, "0")}:
+          {seconds.toString().padStart(2, "0")}
         </p>
         <button onClick={handleInc}>+</button>
       </section>
